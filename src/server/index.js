@@ -1,11 +1,14 @@
 const express = require("express");
 const multer = require("multer");
+const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const csvToJson = require("csv-file-to-json");
 
 const app = express();
 const uploadFolder = "./upload/";
+
+app.use(cors());
 
 // 测试
 app.get("/hello", (req, res) => {
