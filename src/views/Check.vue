@@ -1,8 +1,18 @@
 <template>
   <div>
-    <el-table :data="tableData.data" style="width: 100%" border>
-      <el-table-column prop="a" label="名称" width="180"> </el-table-column>
-      <el-table-column prop="a" label="链接" width="180"> </el-table-column>
+    <el-table :data="tableData" style="width: 100%" border>
+      <el-table-column
+        prop="账号名称"
+        label="账号名称"
+        width="220"
+      ></el-table-column>
+      <el-table-column prop="案例" label="案例" width="280">
+        <template slot-scope="scope">
+          <a :href="scope.row['案例']" target="_blank">{{
+            scope.row["案例"]
+          }}</a>
+        </template>
+      </el-table-column>
       <el-table-column prop="a" label="状态"> </el-table-column>
     </el-table>
   </div>
@@ -11,12 +21,10 @@
 <script>
 export default {
   name: "Check",
-  data() {
-    return {
-      tableData: {
-        data: []
-      }
-    };
+  props: {
+    tableData: {
+      type: Array
+    }
   }
 };
 </script>

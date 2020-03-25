@@ -2,10 +2,10 @@
   <div>
     <h1>今日头条账号状态验证</h1>
     <div class="upload-file">
-      <Upload></Upload>
+      <Upload @upload="handleData" />
     </div>
     <div class="data">
-      <Check></Check>
+      <Check :tableData="tableData"></Check>
     </div>
   </div>
 </template>
@@ -16,6 +16,16 @@ export default {
   components: {
     Upload: () => import("./Upload"),
     Check: () => import("./Check")
+  },
+  data() {
+    return {
+      tableData: []
+    };
+  },
+  methods: {
+    handleData(data) {
+      this.tableData = data;
+    }
   }
 };
 </script>
