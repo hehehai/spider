@@ -8,9 +8,12 @@
       ></el-table-column>
       <el-table-column prop="案例" label="案例" width="280">
         <template slot-scope="scope">
-          <a :href="scope.row['案例']" target="_blank">{{
-            scope.row["案例"]
-          }}</a>
+          <a
+            :href="scope.row['案例']"
+            target="_blank"
+            @click.prevent="handleLink(scope.row['案例'])"
+            >{{ scope.row["案例"] }}</a
+          >
         </template>
       </el-table-column>
       <el-table-column prop="a" label="状态"> </el-table-column>
@@ -24,6 +27,12 @@ export default {
   props: {
     tableData: {
       type: Array
+    }
+  },
+  methods: {
+    handleLink(link) {
+      console.log(link);
+      this.$electron.remote.shell.openExternal(link);
     }
   }
 };
