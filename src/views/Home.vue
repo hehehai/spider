@@ -1,12 +1,14 @@
 <template>
   <div>
-    <h1>今日头条账号状态验证</h1>
+    <h1 class="text-center">今日头条账号状态验证</h1>
     <div class="upload-file">
       <Upload @upload="handleData" />
+      <el-button @click="handleCheckAllLink" type="primary" class="check-btn"
+        >验证</el-button
+      >
     </div>
-    <el-button @click="handleCheckAllLink">验证</el-button>
     <div class="data">
-      <Check :tableData="tableData"></Check>
+      <Check :tableData="tableData" :loading="loading"></Check>
     </div>
   </div>
 </template>
@@ -23,7 +25,8 @@ export default {
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      loading: false
     };
   },
   methods: {
@@ -34,6 +37,7 @@ export default {
       }));
     },
     async handleCheckAllLink() {
+      this.loading = true;
       const { data } = await axios({
         url: "http://localhost:3001/check",
         method: "POST",
@@ -42,6 +46,7 @@ export default {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       });
+      this.loading = false;
       if (data && data.code === "200") {
         this.tableData = data.data;
       } else {
@@ -51,3 +56,19 @@ export default {
   }
 };
 </script>
+
+<style lang="css">
+.text-center {
+  text-align: center;
+}
+
+.upload-file {
+  margin: 0 auto;
+  width: 380px;
+}
+
+.check-btn {
+  width: 100%;
+  margin: 1em 0;
+}
+</style>
