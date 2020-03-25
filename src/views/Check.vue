@@ -1,29 +1,49 @@
 <template>
   <div>
     <el-table :data="tableData" style="width: 100%" border>
+      <el-table-column type="index" width="50" align="center">
+      </el-table-column>
       <el-table-column
-        prop="账号名称"
+        prop="mediaName"
         label="账号名称"
         width="220"
       ></el-table-column>
-      <el-table-column prop="案例" label="案例" width="280">
+      <el-table-column prop="link" label="案例">
         <template slot-scope="scope">
           <a
-            :href="scope.row['案例']"
+            :href="scope.row.link"
             target="_blank"
-            @click.prevent="handleLink(scope.row['案例'])"
-            >{{ scope.row["案例"] }}</a
+            @click.prevent="handleLink(scope.row.link)"
+            >{{ scope.row.link }}</a
           >
         </template>
       </el-table-column>
-      <el-table-column prop="a" label="状态"> </el-table-column>
+      <el-table-column prop="status" label="状态" width="100">
+        <template slot-scope="scope">
+          <span :class="['status', scope.row.status]">{{
+            statusTypes[scope.row.status]
+          }}</span>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+const statusTypes = {
+  unknown: "未知",
+  normal: "正常",
+  banded: "封禁",
+  error: "错误"
+};
+
 export default {
   name: "Check",
+  data() {
+    return {
+      statusTypes: Object.freeze(statusTypes)
+    };
+  },
   props: {
     tableData: {
       type: Array
@@ -31,9 +51,32 @@ export default {
   },
   methods: {
     handleLink(link) {
-      console.log(link);
       this.$electron.remote.shell.openExternal(link);
     }
   }
 };
 </script>
+
+<style lang="css">
+.status {
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: white;
+}
+
+.status.unknown {
+  background-color: #5a5a5a;
+}
+
+.status.normal {
+  background-color: #52c41a;
+}
+
+.status.banded {
+  background-color: #722ed1;
+}
+
+.status.error {
+  background-color: #eb2f96;
+}
+</style>
