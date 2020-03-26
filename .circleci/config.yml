@@ -1,20 +1,14 @@
-image: Visual Studio 2017
+version: 2
+jobs:
+  build_windows:
+    docker:
+      - image: electronuserland/builder:wine
+    steps:
+      - checkout
+      - run: yarn && yarn release --win
 
-platform:
-  - x64
-
-cache:
-  - node_modules
-  - '%USERPROFILE%\.electron'
-
-init:
-  - git config --global core.autocrlf input
-
-install:
-  - ps: Install-Product node 10 x64
-  - yarn
-
-build_script:
-  - yarn dist
-
-test: off
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_windows
