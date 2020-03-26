@@ -7,7 +7,8 @@ jobs:
       - checkout
       - run: yarn && yarn electron:build --win
       - store_artifacts:
-          path: /root/project/build
+          path: /tmp/build
+          destination: build
 
 workflows:
   version: 2
