@@ -5,7 +5,7 @@ jobs:
       - image: electronuserland/builder:wine
     steps:
       - checkout
-      - run: yarn && yarn release --win
+      - run: yarn && yarn electron:build --win
 
 workflows:
   version: 2
