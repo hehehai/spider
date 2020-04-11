@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" @click="handleRouter(path)">
     <div class="content">
       <img class="icon" :src="imgPath" :alt="alt" />
       <div class="desc">{{ alt }}</div>
@@ -17,6 +17,11 @@ export default {
   computed: {
     imgPath() {
       return require(`@/assets/${this.path}.png`);
+    }
+  },
+  methods: {
+    handleRouter(platform) {
+      this.$router.push(`/spider/${platform}`);
     }
   }
 };

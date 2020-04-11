@@ -6,8 +6,8 @@
         <p>v{{ appVersion }}</p>
       </div>
       <main class="card-link">
-        <template v-for="item in cardInfo">
-          <card :key="item.path" :path="item.path" :alt="item.alt" />
+        <template v-for="(val, key) in platformType">
+          <card :key="key" :path="key" :alt="val" />
         </template>
       </main>
     </div>
@@ -17,21 +17,7 @@
 <script>
 import { version } from "../../package.json";
 import Card from "@/components/Card";
-
-const cardInfo = [
-  {
-    alt: "今日头条",
-    path: "tt"
-  },
-  {
-    alt: "微博",
-    path: "wb"
-  },
-  {
-    alt: "微博",
-    path: "xhs"
-  }
-];
+import { platformType } from "@/constant";
 
 export default {
   name: "Home",
@@ -39,7 +25,7 @@ export default {
   data() {
     return {
       appVersion: version,
-      cardInfo
+      platformType
     };
   }
 };
