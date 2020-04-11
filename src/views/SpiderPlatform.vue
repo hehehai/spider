@@ -1,5 +1,5 @@
 <template>
-  <div class="spider-page">
+  <div class="spider-page" v-loading="loading">
     <div class="header">
       <BackHeader :label="currentPlatformLabel" />
       <div class="control">
@@ -9,7 +9,12 @@
           @click="isFileUploadModel = true"
           >上传文档</el-button
         >
-        <el-button type="success" icon="el-icon-toilet-paper">抓取</el-button>
+        <el-button
+          type="success"
+          icon="el-icon-toilet-paper"
+          @click="handleCatchLinks"
+          >抓取</el-button
+        >
         <el-button icon="el-icon-truck">导出数据</el-button>
       </div>
     </div>
@@ -34,6 +39,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
 import BackHeader from "@/components/BackHeader";
 import FileUpload from "@/components/upload/FileUpload";
 import { platformType } from "@/constant";
@@ -49,7 +56,8 @@ export default {
     return {
       currentPlatform: "tt",
       isFileUploadModel: false,
-      tableData: []
+      tableData: [],
+      loading: false
     };
   },
   computed: {
@@ -66,6 +74,34 @@ export default {
     handleUploadSuccess(data) {
       this.tableData = data;
       this.isFileUploadModel = false;
+    },
+    async handleCatchLinks() {
+      if (this.tableData.length) {
+        this.loading = true;
+        await this.spiderLinks();
+        this.loading = false;
+      } else {
+        this.$message.error("请先上传文档");
+      }
+    },
+    async spiderLinks() {
+      try {
+        const resData = await axios.post(
+          "http://localhost:56688/check",
+          qs.stringify({
+            links: JSON.stringify(this.tableData),
+            platform: this.currentPlatform
+          }),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            }
+          }
+        );
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
