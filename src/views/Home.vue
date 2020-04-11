@@ -1,74 +1,72 @@
 <template>
-  <div>
-    <h1 class="text-center">今日头条账号状态验证</h1>
-    <div class="upload-file">
-      <Upload @upload="handleData" />
-      <el-button @click="handleCheckAllLink" type="primary" class="check-btn"
-        >验证</el-button
-      >
-    </div>
-    <div class="data">
-      <Check :tableData="tableData" :loading="loading"></Check>
+  <div class="home">
+    <div class="container">
+      <div class="header">
+        <h1 class="title">平台用户账号信息批量检测</h1>
+        <p>v{{ appVersion }}</p>
+      </div>
+      <main class="card-link">
+        <template v-for="item in cardInfo">
+          <card :key="item.path" :path="item.path" :alt="item.alt" />
+        </template>
+      </main>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import qs from "qs";
+import { version } from "../../package.json";
+import Card from "@/components/Card";
+
+const cardInfo = [
+  {
+    alt: "今日头条",
+    path: "tt"
+  },
+  {
+    alt: "微博",
+    path: "wb"
+  },
+  {
+    alt: "微博",
+    path: "xhs"
+  }
+];
 
 export default {
   name: "Home",
-  components: {
-    Upload: () => import("./Upload"),
-    Check: () => import("./Check")
-  },
+  components: { Card },
   data() {
     return {
-      tableData: [],
-      loading: false
+      appVersion: version,
+      cardInfo
     };
-  },
-  methods: {
-    handleData(data) {
-      this.tableData = data.map(i => ({
-        mediaName: i["账号名称"],
-        link: i["案例"]
-      }));
-    },
-    async handleCheckAllLink() {
-      this.loading = true;
-      const { data } = await axios({
-        url: "http://localhost:3001/check",
-        method: "POST",
-        data: qs.stringify({ links: this.tableData }),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      });
-      this.loading = false;
-      if (data && data.code === "200") {
-        this.tableData = data.data;
-      } else {
-        this.$message.error("未知错误");
-      }
-    }
   }
 };
 </script>
 
 <style lang="css">
-.text-center {
+.home {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
-.upload-file {
-  margin: 0 auto;
-  width: 380px;
+.home .title {
+  font-weight: normal;
+  font-size: 36px;
 }
 
-.check-btn {
-  width: 100%;
-  margin: 1em 0;
+.card-link {
+  margin: 4rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.card-link > div + div {
+  margin-left: 2rem;
 }
 </style>

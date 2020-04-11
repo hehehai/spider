@@ -1,14 +1,20 @@
 <template>
   <div id="app">
-    <Home />
+    <router-view />
   </div>
 </template>
 
-<script>
-export default {
-  name: "app",
-  components: {
-    Home: () => import("./views/Home")
-  }
-};
-</script>
+<style lang="css">
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+</style>
