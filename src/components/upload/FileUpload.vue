@@ -12,7 +12,7 @@
       <div class="demo">
         <FileUploadDemo :platform="platform" :label="label" />
       </div>
-      <Upload />
+      <Upload @uploaded="handleUploadSuccess" />
     </div>
   </el-drawer>
 </template>
@@ -40,6 +40,11 @@ export default {
   watch: {
     isShow(val) {
       this.isOpened = val;
+    }
+  },
+  methods: {
+    handleUploadSuccess(data) {
+      this.$emit("uploaded", data);
     }
   }
 };

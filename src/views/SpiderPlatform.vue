@@ -17,11 +17,18 @@
       <div class="statistics">
         <div class="statistics-card"></div>
       </div>
+      <div class="table-data">
+        <p v-for="item in tableData" :key="item.id">
+          <span>{{ item.name }}</span>
+          <span>{{ item.link }}</span>
+        </p>
+      </div>
     </div>
     <FileUpload
       :is-show.sync="isFileUploadModel"
       :platform="currentPlatform"
       :label="currentPlatformLabel"
+      @uploaded="handleUploadSuccess"
     />
   </div>
 </template>
@@ -37,7 +44,8 @@ export default {
   data() {
     return {
       currentPlatform: "tt",
-      isFileUploadModel: false
+      isFileUploadModel: false,
+      tableData: []
     };
   },
   computed: {
@@ -48,6 +56,12 @@ export default {
   mounted() {
     if (this.$route.params.platform) {
       this.currentPlatform = this.$route.params.platform;
+    }
+  },
+  methods: {
+    handleUploadSuccess(data) {
+      this.tableData = data;
+      this.isFileUploadModel = false;
     }
   }
 };

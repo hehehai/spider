@@ -2,7 +2,7 @@
   <el-upload
     class="upload-control"
     drag
-    action="https://jsonplaceholder.typicode.com/posts/"
+    action="http://localhost:56688/upload"
     :before-upload="handleBeforeUpload"
     :on-success="handleUploadSuccess"
     :on-error="handleUploadError"
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import nanoid from "nanoid";
+
 export default {
   name: "Upload",
   data() {
@@ -30,11 +32,36 @@ export default {
     },
     handleUploadSuccess(res) {
       this.uploading = false;
-      console.log(res);
+      if (res.code && res.code === "200") {
+        if (res.data.length) {
+          const first = res.data[0];
+          if (!first["账号"]) {
+            this.$message.error("文件中表头无 账号");
+          } else if (!first["链接"]) {
+            this.$message.error("文件中表头无 账号");
+          } else {
+            this.$emit("uploaded", this.convertData(res.data));
+            this.$message.success("文件上传成功");
+          }
+        } else {
+          this.$message.error("空的文件，请重新上传");
+        }
+      } else {
+        console.log(this.$message);
+        this.$message.error("文件上传转换发生错误，请上传csv文件");
+      }
     },
     handleUploadError(err) {
       this.uploading = false;
       console.log(err);
+      this.$message.error("文件上传发生错误，请再次尝试");
+    },
+    convertData(data) {
+      return data.map(i => ({
+        id: nanoid(),
+        name: i["账号"],
+        link: i["链接"]
+      }));
     }
   }
 };
