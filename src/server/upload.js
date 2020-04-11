@@ -3,7 +3,7 @@ const path = require("path");
 const csvToJson = require("csv-file-to-json");
 const { createFolder } = require("./utils");
 
-const uploadFolder = "./upload/";
+const uploadFolder = "./_upload/";
 
 createFolder(uploadFolder);
 
