@@ -5,7 +5,6 @@ const xhsGet = require("./xhs");
 function check(app) {
   app.post("/check", (req, res) => {
     let { links, platform } = req.body;
-    console.log(req.body);
     links = JSON.parse(links);
 
     let checkedLinks = [];
