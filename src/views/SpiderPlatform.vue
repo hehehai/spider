@@ -3,7 +3,12 @@
     <div class="header">
       <BackHeader :label="currentPlatformLabel" />
       <div class="control">
-        <el-button type="primary" icon="el-icon-upload">上传文档</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-upload"
+          @click="isFileUploadModel = true"
+          >上传文档</el-button
+        >
         <el-button type="success" icon="el-icon-toilet-paper">抓取</el-button>
         <el-button icon="el-icon-truck">导出数据</el-button>
       </div>
@@ -13,19 +18,26 @@
         <div class="statistics-card"></div>
       </div>
     </div>
+    <FileUpload
+      :is-show.sync="isFileUploadModel"
+      :platform="currentPlatform"
+      :label="currentPlatformLabel"
+    />
   </div>
 </template>
 
 <script>
 import BackHeader from "@/components/BackHeader";
+import FileUpload from "@/components/upload/FileUpload";
 import { platformType } from "@/constant";
 
 export default {
   name: "SpiderPlatform",
-  components: { BackHeader },
+  components: { BackHeader, FileUpload },
   data() {
     return {
-      currentPlatform: "tt"
+      currentPlatform: "tt",
+      isFileUploadModel: false
     };
   },
   computed: {
@@ -42,7 +54,7 @@ export default {
 </script>
 
 <style lang="css">
-.header {
+.spider-page .header {
   display: flex;
   padding: 8px;
   justify-content: space-between;
@@ -50,11 +62,11 @@ export default {
   border-bottom: 1px solid #f5f5f5;
 }
 
-.wrap {
+.spider-page .wrap {
   padding: 8px;
 }
 
-.statistics-card {
+.spider-page .statistics-card {
   height: 120px;
   border-radius: 6px;
   border: 1px solid #f5f5f5;
