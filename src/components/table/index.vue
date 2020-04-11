@@ -15,12 +15,39 @@
           </p>
         </template>
       </el-table-column>
+      <template v-if="platform === 'tt'">
+        <el-table-column prop="status" label="账号状态" width="180">
+          <template slot-scope="scope">
+            <span>{{ getTTStatus(scope.row.status) }}</span>
+          </template>
+        </el-table-column>
+      </template>
+      <template v-else-if="platform === 'wb'">
+        <el-table-column prop="status" label="粉丝" width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status && scope.row.status.fans }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="认证" width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status }}</span>
+          </template>
+        </el-table-column>
+      </template>
+      <template v-else-if="platform === 'xhs'">
+        <el-table-column prop="status" label="粉丝" width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status && scope.row.status.fans }}</span>
+          </template>
+        </el-table-column>
+      </template>
     </el-table>
   </div>
 </template>
 
 <script>
 import { isTTLink, isWBLink, isXHSLink } from "@/constant";
+import { ttStatus } from "@/constant";
 
 export default {
   name: "TableData",
@@ -43,6 +70,9 @@ export default {
         case "xhs":
           return isXHSLink(link);
       }
+    },
+    getTTStatus(key) {
+      return ttStatus[key];
     }
   }
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-// import "./server";
+import "./server";
 
 import { app, protocol, BrowserWindow } from "electron";
 import {

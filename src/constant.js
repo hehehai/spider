@@ -4,6 +4,13 @@ export const platformType = {
   xhs: "小红书"
 };
 
+export const ttStatus = {
+  unknown: "未知",
+  normal: "正常",
+  banded: "封禁",
+  error: "错误"
+};
+
 export const isTTLink = (link = "") => {
   return /https:\/\/www\.toutiao\.com\/c\/user\/.+/i.test(link.trim());
 };

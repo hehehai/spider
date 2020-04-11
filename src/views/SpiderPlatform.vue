@@ -98,9 +98,13 @@ export default {
             }
           }
         );
-        console.log(resData);
+        if (resData.status === 200 && resData.data.code === "200") {
+          this.tableData = resData.data.data;
+        } else {
+          this.$message.error("抓取失败");
+        }
       } catch (error) {
-        console.log(error);
+        this.$message.error("抓取失败，请重试");
       }
     }
   }
