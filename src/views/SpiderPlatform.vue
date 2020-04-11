@@ -18,10 +18,10 @@
         <div class="statistics-card"></div>
       </div>
       <div class="table-data">
-        <p v-for="item in tableData" :key="item.id">
-          <span>{{ item.name }}</span>
-          <span>{{ item.link }}</span>
-        </p>
+        <TableData
+          :table-data="tableData"
+          :platform="currentPlatform"
+        ></TableData>
       </div>
     </div>
     <FileUpload
@@ -40,7 +40,11 @@ import { platformType } from "@/constant";
 
 export default {
   name: "SpiderPlatform",
-  components: { BackHeader, FileUpload },
+  components: {
+    BackHeader,
+    FileUpload,
+    TableData: () => import("@/components/table/index")
+  },
   data() {
     return {
       currentPlatform: "tt",

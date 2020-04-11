@@ -17,6 +17,7 @@
 
 <script>
 import nanoid from "nanoid";
+import { cutOffQuery } from "@/constant";
 
 export default {
   name: "Upload",
@@ -60,7 +61,7 @@ export default {
       return data.map(i => ({
         id: nanoid(),
         name: i["账号"],
-        link: i["链接"]
+        link: cutOffQuery(i["链接"])
       }));
     }
   }
