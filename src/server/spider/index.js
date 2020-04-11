@@ -1,5 +1,6 @@
 const ttGet = require("./tt");
 const wbGet = require("./wb");
+const xhsGet = require("./xhs");
 
 function check(app) {
   app.post("/check", (req, res) => {
@@ -28,8 +29,7 @@ async function checkLink(link, platform) {
     case "wb":
       return await wbGet(link);
     case "xhs":
-      console.log("xhs");
-      return "";
+      return await xhsGet(link);
   }
 }
 

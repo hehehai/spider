@@ -14,21 +14,14 @@ const headers = {
 
 const spiderLink = "https://m.weibo.cn/profile/info?uid=";
 
-// const status = {
-//   unknown: "未知",
-//   normal: "正常",
-//   banded: "封禁",
-//   error: "错误"
-// };
-
 function getAuthInfo(user) {
   return {
-    name: user.screen_name,
-    verified: user.verified,
+    name: user.screen_name, // 用户名
+    verified: user.verified, // 验证
     verified_type: user.verified_type,
     verified_type_ext: user.verified_type_ext,
     close_blue_v: user.close_blue_v,
-    fans: user.followers_count
+    fans: user.followers_count // 粉丝
   };
 }
 
