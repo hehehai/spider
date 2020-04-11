@@ -34,6 +34,6 @@ body {
 }
 
 .el-drawer__header {
-  margin-bottom: 12px;
+  margin-bottom: 12px !important;
 }
 </style>
