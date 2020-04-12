@@ -15,7 +15,7 @@
           @click="handleCatchLinks"
           >抓取</el-button
         >
-        <el-button icon="el-icon-truck">导出数据</el-button>
+        <el-button icon="el-icon-truck" @click="exportData">导出数据</el-button>
       </div>
     </div>
     <div class="wrap">
@@ -43,7 +43,7 @@ import axios from "axios";
 import qs from "qs";
 import BackHeader from "@/components/BackHeader";
 import FileUpload from "@/components/upload/FileUpload";
-import { platformType } from "@/constant";
+import { platformType, ttStatus } from "@/constant";
 
 export default {
   name: "SpiderPlatform",
@@ -105,6 +105,90 @@ export default {
         }
       } catch (error) {
         this.$message.error("抓取失败，请重试");
+      }
+    },
+    exportExcel(statusColumns, data, title) {
+      const columns = [
+        {
+          label: "账号",
+          prop: "name"
+        },
+        {
+          label: "链接",
+          prop: "link"
+        }
+      ];
+      columns.push(...statusColumns);
+      this.$export.excel({
+        columns,
+        data,
+        title
+      });
+    },
+    ttDataExport() {
+      this.exportExcel(
+        [
+          {
+            label: "账号状态",
+            prop: "status"
+          }
+        ],
+        this.tableData.map(i => {
+          return {
+            ...i,
+            status: ttStatus[i.status]
+          };
+        }),
+        "今日头条账号状态验证"
+      );
+    },
+    wbDataExport() {
+      this.exportExcel(
+        [
+          {
+            label: "粉丝",
+            prop: "fans"
+          },
+          {
+            label: "认证",
+            prop: "verified"
+          }
+        ],
+        this.tableData.map(i => {
+          return {
+            ...i,
+            fans: i.status.fans,
+            verified: JSON.stringify(i.status)
+          };
+        }),
+        "微博账号状态验证"
+      );
+    },
+    xhsDataExport() {
+      this.exportExcel(
+        [
+          {
+            label: "粉丝",
+            prop: "fans"
+          }
+        ],
+        this.tableData.map(i => {
+          return {
+            ...i,
+            fans: i.status.fans
+          };
+        }),
+        "小红书账号状态验证"
+      );
+    },
+    exportData() {
+      switch (this.currentPlatform) {
+        case "tt":
+          return this.ttDataExport();
+        case "wb":
+          return this.wbDataExport();
+        case "xhs":
+          return this.xhsDataExport();
       }
     }
   }

@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@d2-projects/vue-table-export": "^1.0.1",
     "@vue/cli-shared-utils": "^4.2.3",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
