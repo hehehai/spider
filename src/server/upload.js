@@ -1,9 +1,11 @@
+const { app: electronApp } = require("electron");
 const multer = require("multer");
 const path = require("path");
 const csvToJson = require("csv-file-to-json");
 const { createFolder } = require("./utils");
 
-const uploadFolder = "./_upload/";
+const uploadPath = "/_upload/";
+const uploadFolder = path.join(electronApp.getPath("userData"), uploadPath);
 
 createFolder(uploadFolder);
 
