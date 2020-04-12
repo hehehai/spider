@@ -208,6 +208,10 @@ export default {
   padding: 8px;
 }
 
+.spider-page .statistics {
+  margin-bottom: 8px;
+}
+
 .spider-page .statistics-card {
   height: 120px;
   border-radius: 6px;
