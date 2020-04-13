@@ -21,11 +21,9 @@ function getAuthorInfo(authorEl, $) {
   let infos = [];
   authorEl.find(".card-info .info-number").each((_, i) => {
     infos.push(
-      Number.parseInt(
-        $(i)
-          .eq(0)
-          .text()
-      )
+      $(i)
+        .eq(0)
+        .text()
     );
   });
   return {

@@ -227,14 +227,24 @@ export default {
       this.exportExcel(
         [
           {
+            label: "关注",
+            prop: "sub"
+          },
+          {
             label: "粉丝",
             prop: "fans"
+          },
+          {
+            label: "获赞与收藏",
+            prop: "likeAndMark"
           }
         ],
         this.tableData.right.map(i => {
           return {
             ...i,
-            fans: i.status.fans
+            sub: i.status.sub,
+            fans: i.status.fans,
+            likeAndMark: i.status.likeAndMark
           };
         }),
         "小红书账号状态验证"

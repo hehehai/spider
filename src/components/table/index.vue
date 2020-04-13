@@ -35,9 +35,19 @@
         </el-table-column>
       </template>
       <template v-else-if="platform === 'xhs'">
-        <el-table-column prop="status" label="粉丝" width="180">
+        <el-table-column prop="status" label="关注" width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status && scope.row.status.sub }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="粉丝" width="120">
           <template slot-scope="scope">
             <span>{{ scope.row.status && scope.row.status.fans }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="获赞与收藏" width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status && scope.row.status.likeAndMark }}</span>
           </template>
         </el-table-column>
       </template>
