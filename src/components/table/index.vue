@@ -1,6 +1,6 @@
 <template>
   <div class="table-data">
-    <el-table :data="tableData" style="width: 100%" border>
+    <el-table :data="allTableData" style="width: 100%" border>
       <el-table-column prop="name" label="账号" width="180"></el-table-column>
       <el-table-column prop="link" label="链接">
         <template slot-scope="scope">
@@ -53,11 +53,16 @@ export default {
   name: "TableData",
   props: {
     tableData: {
-      type: Array
+      type: Object
     },
     platform: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    allTableData() {
+      return [...this.tableData.error, ...this.tableData.right];
     }
   },
   methods: {

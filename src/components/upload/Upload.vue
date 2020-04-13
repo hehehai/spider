@@ -58,11 +58,12 @@ export default {
       this.$message.error("文件上传发生错误，请再次尝试");
     },
     convertData(data) {
-      return data.map(i => ({
+      const d = data.map(i => ({
         id: nanoid(),
         name: i["账号"],
         link: cutOffQuery(i["链接"])
       }));
+      return d.filter(i => i.name && i.link);
     }
   }
 };

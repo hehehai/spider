@@ -16,11 +16,17 @@
           >抓取</el-button
         >
         <el-button icon="el-icon-truck" @click="exportData">导出数据</el-button>
+        <el-button icon="el-icon-truck" @click="exportErrorLinks"
+          >导出错误链接</el-button
+        >
       </div>
     </div>
     <div class="wrap">
       <div class="statistics">
-        <div class="statistics-card"></div>
+        <div class="statistics-card">
+          <p>正确链接： {{ tableData.right.length }}</p>
+          <p style="color: red">错误链接：{{ tableData.error.length }}</p>
+        </div>
       </div>
       <div class="table-data">
         <TableData
@@ -43,7 +49,13 @@ import axios from "axios";
 import qs from "qs";
 import BackHeader from "@/components/BackHeader";
 import FileUpload from "@/components/upload/FileUpload";
-import { platformType, ttStatus } from "@/constant";
+import {
+  platformType,
+  ttStatus,
+  isTTLink,
+  isWBLink,
+  isXHSLink
+} from "@/constant";
 
 export default {
   name: "SpiderPlatform",
@@ -56,7 +68,10 @@ export default {
     return {
       currentPlatform: "tt",
       isFileUploadModel: false,
-      tableData: [],
+      tableData: {
+        right: [],
+        error: []
+      },
       loading: false
     };
   },
@@ -72,16 +87,19 @@ export default {
   },
   methods: {
     handleUploadSuccess(data) {
-      this.tableData = data;
+      this.tableData = this.checkLinks(data);
       this.isFileUploadModel = false;
     },
     async handleCatchLinks() {
-      if (this.tableData.length) {
+      if (this.tableData.right.length) {
+        if (this.tableData.error.length) {
+          this.$message.error(`${this.tableData.error.length}错误链接跳过检测`);
+        }
         this.loading = true;
         await this.spiderLinks();
         this.loading = false;
       } else {
-        this.$message.error("请先上传文档");
+        this.$message.error("无可检测链接");
       }
     },
     async spiderLinks() {
@@ -89,7 +107,7 @@ export default {
         const resData = await axios.post(
           "http://localhost:56688/check",
           qs.stringify({
-            links: JSON.stringify(this.tableData),
+            links: JSON.stringify(this.tableData.right),
             platform: this.currentPlatform
           }),
           {
@@ -99,13 +117,51 @@ export default {
           }
         );
         if (resData.status === 200 && resData.data.code === "200") {
-          this.tableData = resData.data.data;
+          this.tableData.right = resData.data.data;
         } else {
           this.$message.error("抓取失败");
         }
       } catch (error) {
         this.$message.error("抓取失败，请重试");
       }
+    },
+    checkLinks(d) {
+      const right = [];
+      const error = [];
+      switch (this.currentPlatform) {
+        case "tt":
+          d.forEach(i => {
+            if (isTTLink(i.link)) {
+              right.push(i);
+            } else {
+              error.push(i);
+            }
+          });
+          break;
+        case "wb":
+          d.forEach(i => {
+            if (isWBLink(i.link)) {
+              right.push(i);
+            } else {
+              error.push(i);
+            }
+          });
+          break;
+        case "xhs":
+          d.forEach(i => {
+            if (isXHSLink(i.link)) {
+              right.push(i);
+            } else {
+              error.push(i);
+            }
+          });
+          break;
+      }
+
+      return {
+        right,
+        error
+      };
     },
     exportExcel(statusColumns, data, title) {
       const columns = [
@@ -133,7 +189,7 @@ export default {
             prop: "status"
           }
         ],
-        this.tableData.map(i => {
+        this.tableData.right.map(i => {
           return {
             ...i,
             status: ttStatus[i.status]
@@ -154,7 +210,7 @@ export default {
             prop: "verified"
           }
         ],
-        this.tableData.map(i => {
+        this.tableData.right.map(i => {
           return {
             ...i,
             fans: i.status.fans,
@@ -172,7 +228,7 @@ export default {
             prop: "fans"
           }
         ],
-        this.tableData.map(i => {
+        this.tableData.right.map(i => {
           return {
             ...i,
             fans: i.status.fans
@@ -180,6 +236,9 @@ export default {
         }),
         "小红书账号状态验证"
       );
+    },
+    exportErrorLinks() {
+      this.exportExcel([], this.tableData.error, "链接格式错误");
     },
     exportData() {
       switch (this.currentPlatform) {
