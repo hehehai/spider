@@ -7,7 +7,8 @@ import {
   Message,
   Loading,
   PageHeader,
-  Drawer
+  Drawer,
+  Progress
 } from "element-ui";
 
 Vue.use(Button);
@@ -17,5 +18,6 @@ Vue.use(TableColumn);
 Vue.use(Loading);
 Vue.use(PageHeader);
 Vue.use(Drawer);
+Vue.use(Progress);
 
 Vue.prototype.$message = Message;

@@ -1,5 +1,5 @@
 <template>
-  <div class="spider-page" v-loading="loading">
+  <div class="spider-page">
     <div class="header">
       <BackHeader :label="currentPlatformLabel" />
       <div class="control">
@@ -24,11 +24,25 @@
     <div class="wrap">
       <div class="statistics">
         <div class="statistics-card">
-          <p>正确链接： {{ tableData.right.length }}</p>
-          <p style="color: red">错误链接：{{ tableData.error.length }}</p>
+          <div class="link-info">
+            <div class="info">
+              <p>正确链接：{{ tableData.right.length }}</p>
+              <p style="color: red">错误链接：{{ tableData.error.length }}</p>
+            </div>
+            <div class="progress">
+              {{ progress > 0 ? `${progress}%` : "数据传输中..." }}
+            </div>
+          </div>
+          <div class="check-progress">
+            <el-progress
+              :text-inside="true"
+              :stroke-width="26"
+              :percentage="progress"
+            ></el-progress>
+          </div>
         </div>
       </div>
-      <div class="table-data">
+      <div class="table-data" v-loading="loading">
         <TableData
           :table-data="tableData"
           :platform="currentPlatform"
@@ -72,7 +86,8 @@ export default {
         right: [],
         error: []
       },
-      loading: false
+      loading: false,
+      progress: 0
     };
   },
   computed: {
@@ -84,13 +99,23 @@ export default {
     if (this.$route.params.platform) {
       this.currentPlatform = this.$route.params.platform;
     }
+    this.checkProgressInit();
   },
   methods: {
-    // async handleDemo() {
-    //   this.$ipcRenderer.send("demo-message", "ping");
-    // },
+    async checkProgressInit() {
+      this.$ipcRenderer.on("progress-check", (event, arg) => {
+        // 接收到Main进程返回的消息
+        let progress = Number.parseFloat(
+          (Number.parseFloat(arg) * 100).toFixed(2)
+        );
+        const message = `异步消息回复: ${progress}`;
+        console.log(message);
+        this.progress = progress;
+      });
+    },
     handleUploadSuccess(data) {
       this.tableData = this.checkLinks(data);
+      this.progress = 0;
       this.isFileUploadModel = false;
     },
     async handleCatchLinks() {
@@ -285,8 +310,25 @@ export default {
 }
 
 .spider-page .statistics-card {
+  padding: 10px;
   height: 120px;
   border-radius: 6px;
   border: 1px solid #f5f5f5;
+}
+
+.spider-page .link-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.spider-page p {
+  margin: 0;
+}
+
+.spider-page .link-info .progress {
+  font-size: 40px;
+  color: #222437;
 }
 </style>

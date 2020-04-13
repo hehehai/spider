@@ -1,17 +1,19 @@
 const ttGet = require("./tt");
 const wbGet = require("./wb");
 const xhsGet = require("./xhs");
-// const { ipcMain } = require("electron");
+const { ipcMain } = require("electron");
 
-// ipcMain.on("demo-message", (event, data) => {
-//   console.log(data);
-//   // arg为接受到的消息
-//   event.reply("demo-reply", "pong"); // 返回一个'pong'
-// });
+ipcMain.on("demo-message", (event, data) => {
+  console.log(data);
+  // arg为接受到的消息
+  event.reply("demo-reply", "pong"); // 返回一个'pong'
+});
 
-function check(app) {
-  // console.log(win);
-  // win.webContents.send("demo-reply", "whoooooooh!");
+function progress(val, win) {
+  win.webContents.send("progress-check", val);
+}
+
+function check(app, win) {
   app.post("/check", (req, res) => {
     let { links, platform } = req.body;
     links = JSON.parse(links);
@@ -23,6 +25,8 @@ function check(app) {
         ...i,
         status: result
       });
+      // console.log(checkedLinks.length, links.length);
+      progress(checkedLinks.length / links.length, win);
       if (checkedLinks.length === links.length) {
         res.send({ code: "200", msg: "OK", data: checkedLinks });
       }

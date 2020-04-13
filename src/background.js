@@ -1,7 +1,6 @@
 "use strict";
 
-import "./server";
-
+import server from "./server";
 import { app, protocol, BrowserWindow } from "electron";
 import {
   createProtocol
@@ -37,6 +36,7 @@ function createWindow() {
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
   }
+  server(win);
 
   win.on("closed", () => {
     win = null;
