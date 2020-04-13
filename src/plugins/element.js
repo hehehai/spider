@@ -4,7 +4,7 @@ import {
   Upload,
   Table,
   TableColumn,
-  Message,
+  Notification,
   Loading,
   PageHeader,
   Drawer,
@@ -20,4 +20,4 @@ Vue.use(PageHeader);
 Vue.use(Drawer);
 Vue.use(Progress);
 
-Vue.prototype.$message = Message;
+Vue.prototype.$notify = Notification;

@@ -29,7 +29,7 @@
               <p>正确链接：{{ tableData.right.length }}</p>
               <p style="color: red">错误链接：{{ tableData.error.length }}</p>
             </div>
-            <div class="progress">
+            <div class="progress" v-if="loading || progress >= 100">
               {{ progress > 0 ? `${progress}%` : "数据传输中..." }}
             </div>
           </div>
@@ -121,13 +121,23 @@ export default {
     async handleCatchLinks() {
       if (this.tableData.right.length) {
         if (this.tableData.error.length) {
-          this.$message.error(`${this.tableData.error.length}错误链接跳过检测`);
+          this.$notify.error({
+            title: "提示",
+            type: "info",
+            message: `${this.tableData.error.length}错误链接跳过检测`,
+            position: "bottom-left"
+          });
         }
         this.loading = true;
         await this.spiderLinks();
         this.loading = false;
       } else {
-        this.$message.error("无可检测链接");
+        this.$notify.error({
+          title: "错误",
+          type: "error",
+          message: "无可检测链接",
+          position: "bottom-left"
+        });
       }
     },
     async spiderLinks() {
@@ -147,10 +157,20 @@ export default {
         if (resData.status === 200 && resData.data.code === "200") {
           this.tableData.right = resData.data.data;
         } else {
-          this.$message.error("抓取失败");
+          this.$notify.error({
+            title: "抓取失败",
+            type: "error",
+            message: "可能是链接的问题",
+            position: "bottom-left"
+          });
         }
       } catch (error) {
-        this.$message.error("抓取失败，请重试");
+        this.$notify.error({
+          title: "抓取失败",
+          type: "error",
+          message: "请重试",
+          position: "bottom-left"
+        });
       }
     },
     checkLinks(d) {

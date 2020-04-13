@@ -37,25 +37,54 @@ export default {
         if (res.data.length) {
           const first = res.data[0];
           if (!first["账号"]) {
-            this.$message.error("文件中表头无 账号");
+            this.$notify.error({
+              title: "错误",
+              type: "error",
+              message: "文件中表头无 账号, 请尝试将csv转换为utf-8",
+              position: "bottom-left"
+            });
           } else if (!first["链接"]) {
-            this.$message.error("文件中表头无 账号");
+            this.$notify.error({
+              title: "错误",
+              type: "error",
+              message: "文件中表头无 链接, 请尝试将csv转换为utf-8",
+              position: "bottom-left"
+            });
           } else {
             this.$emit("uploaded", this.convertData(res.data));
-            this.$message.success("文件上传成功");
+            this.$notify.error({
+              title: "成功",
+              type: "success",
+              message: "请检测数据，点击 爬取",
+              position: "bottom-left"
+            });
           }
         } else {
-          this.$message.error("空的文件，请重新上传");
+          this.$notify.error({
+            title: "错误",
+            type: "error",
+            message: "空的文件，请重新上传",
+            position: "bottom-left"
+          });
         }
       } else {
-        console.log(this.$message);
-        this.$message.error("文件上传转换发生错误，请上传csv文件");
+        this.$notify.error({
+          title: "错误",
+          type: "error",
+          message: "文件上传转换发生错误，请上传csv文件",
+          position: "bottom-left"
+        });
       }
     },
     handleUploadError(err) {
       this.uploading = false;
       console.log(err);
-      this.$message.error("文件上传发生错误，请再次尝试");
+      this.$notify.error({
+        title: "错误",
+        type: "error",
+        message: "文件上传发生错误，请再次尝试",
+        position: "bottom-left"
+      });
     },
     convertData(data) {
       const d = data.map(i => ({
