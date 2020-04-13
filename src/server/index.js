@@ -5,6 +5,7 @@ const spider = require("./spider");
 const bodyParser = require("body-parser");
 
 const app = express();
+// let win = null;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -16,5 +17,10 @@ spider(app);
 app.get("/hello", (req, res) => {
   res.send("Good");
 });
-
 app.listen(56688);
+
+// module.exports = function start(w) {
+//   console.log(w);
+//   win = w;
+
+// };

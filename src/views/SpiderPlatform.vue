@@ -86,6 +86,9 @@ export default {
     }
   },
   methods: {
+    // async handleDemo() {
+    //   this.$ipcRenderer.send("demo-message", "ping");
+    // },
     handleUploadSuccess(data) {
       this.tableData = this.checkLinks(data);
       this.isFileUploadModel = false;

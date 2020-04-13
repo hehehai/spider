@@ -1,8 +1,17 @@
 const ttGet = require("./tt");
 const wbGet = require("./wb");
 const xhsGet = require("./xhs");
+// const { ipcMain } = require("electron");
+
+// ipcMain.on("demo-message", (event, data) => {
+//   console.log(data);
+//   // arg为接受到的消息
+//   event.reply("demo-reply", "pong"); // 返回一个'pong'
+// });
 
 function check(app) {
+  // console.log(win);
+  // win.webContents.send("demo-reply", "whoooooooh!");
   app.post("/check", (req, res) => {
     let { links, platform } = req.body;
     links = JSON.parse(links);
