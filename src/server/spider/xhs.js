@@ -7,6 +7,13 @@ const spider = new Crawler({
   // userAgent: userAgents
 });
 
+const empty = {
+  name: '', // 用户名
+  sub: "", // 关注
+  fans: '', //粉丝
+  likeAndMark: '' // 喜欢及收藏
+};
+
 const headers = {
   Cookie:
     "xhsTracker=url=user-profile&xhsshare=CopyLink; xhsTrackerId=e2093deb-cc4f-410f-c1d2-525461d85d07; xhs_eaglet_domain_user_id=a7f41ba6-0c18-42f5-8859-a06f9c53c134; timestamp1=2900343109; hasaki=JTVCJTIyTW96aWxsYSUyRjUuMCUyMChNYWNpbnRvc2glM0IlMjBJbnRlbCUyME1hYyUyME9TJTIwWCUyMDEwXzE1XzQpJTIwQXBwbGVXZWJLaXQlMkY1MzcuMzYlMjAoS0hUTUwlMkMlMjBsaWtlJTIwR2Vja28pJTIwQ2hyb21lJTJGODAuMC4zOTg3LjE0OSUyMFNhZmFyaSUyRjUzNy4zNiUyMiUyQyUyMnpoLUNOJTIyJTJDMjQlMkMtNDgwJTJDdHJ1ZSUyQ3RydWUlMkN0cnVlJTJDJTIydW5kZWZpbmVkJTIyJTJDJTIyZnVuY3Rpb24lMjIlMkNudWxsJTJDJTIyTWFjSW50ZWwlMjIlMkMxNiUyQzglMkMlMjIxJTIyJTJDJTIyQ2hyb21lJTIwUERGJTIwUGx1Z2luJTNBJTNBUG9ydGFibGUlMjBEb2N1bWVudCUyMEZvcm1hdCUzQSUzQWFwcGxpY2F0aW9uJTJGeC1nb29nbGUtY2hyb21lLXBkZn5wZGYlM0JDaHJvbWUlMjBQREYlMjBWaWV3ZXIlM0ElM0ElM0ElM0FhcHBsaWNhdGlvbiUyRnBkZn5wZGYlM0JOYXRpdmUlMjBDbGllbnQlM0ElM0ElM0ElM0FhcHBsaWNhdGlvbiUyRngtbmFjbH4lMkNhcHBsaWNhdGlvbiUyRngtcG5hY2x+JTJDYXBwbGljYXRpb24lMkZ4LXBwYXBpLXZ5c29yfiUyQ2FwcGxpY2F0aW9uJTJGeC1wcGFwaS12eXNvci1hdWRpb34lMjIlMkMzMTc5MTkxNTI1JTVE; timestamp2=bd8ee3d55437e227659bf9c1b71e083e; xhs_spses.5dde=*; extra_exp_ids=gif_exp1; xhs_spid.5dde=496d65bf992f5ecf.1586231636.2.1586339407.1586231651.cfa5f200-5039-4082-b9a5-71ce5c4bacea",
@@ -36,7 +43,7 @@ function getAuthorInfo(authorEl, $) {
 
 // 请求
 module.exports = function get(link) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     spider.queue([
       {
         uri: link,
@@ -45,7 +52,7 @@ module.exports = function get(link) {
         callback: function(error, res, done) {
           if (error) {
             console.log(error);
-            reject(false);
+            resolve(empty);
           } else {
             const $ = res.$;
             const authorEl = $(".user-container");
@@ -54,7 +61,7 @@ module.exports = function get(link) {
               resolve(authoInfo);
             } else {
               console.log("小红书爬取，为找到作者");
-              reject(false);
+              resolve(empty);
             }
           }
           done();

@@ -7,6 +7,15 @@ const spider = new Crawler({
   // userAgent: userAgents
 });
 
+const empty = {
+  name: '', // 用户名
+  verified: '', // 验证
+  verified_type: '',
+  verified_type_ext: '',
+  close_blue_v: '',
+  fans: '' // 粉丝
+};
+
 const headers = {
   "User-Agent":
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
@@ -28,7 +37,10 @@ function getAuthInfo(user) {
 // 请求
 module.exports = async function get(link) {
   const oid = await getOid(link);
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
+    if (!oid) {
+      resolve(empty)
+    }
     spider.queue([
       {
         uri: `${spiderLink}${oid}`,
@@ -37,14 +49,14 @@ module.exports = async function get(link) {
         callback: function(error, res, done) {
           if (error) {
             console.log(error);
-            reject(false);
+            resolve(empty);
           } else {
             const resData = JSON.parse(res.body);
             if (resData.data.user.id) {
               resolve(getAuthInfo(resData.data.user));
             } else {
               console.log("微博用户信息未找到");
-              reject(false);
+              resolve(empty);
             }
           }
           done();

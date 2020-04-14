@@ -30,7 +30,6 @@ module.exports = function get(link) {
             if (!$) {
               console.log("err parse", res);
               resolve("error");
-              done();
             } else {
               // $默认使用Cheerio
               // 这是为服务端设计的轻量级jQuery核心实现
