@@ -287,9 +287,9 @@ export default {
         this.tableData.right.map(i => {
           return {
             ...i,
-            sub: i.status.sub,
-            fans: i.status.fans,
-            likeAndMark: i.status.likeAndMark
+            sub: i.status && i.status.sub,
+            fans: i.status && i.status.fans,
+            likeAndMark: i.status && i.status.likeAndMark
           };
         }),
         "小红书账号状态验证"
